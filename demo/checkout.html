@@ -1,0 +1,13 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Finalizar compra · Demo – Galería Viedma</title><link rel="stylesheet" href="demo.css"><script src="demo-common.js"></script></head><body>
+<div class="top"><div style="display:flex;align-items:center;gap:10px"><b>Galería Viedma</b><span class="demo">DEMO</span></div><nav><a href="./" class="NAV1">Enmarcá tu obra</a><a href="cart.html" class="on">Carrito <span id="cc"></span></a><a href="admin.html" class="NAV3">Administración</a></nav></div>
+<script>document.getElementById("cc").textContent="("+DEMO.cart().length+")"</script>
+<div class="wrap"><h1>Finalizar compra</h1><div class="row"><form id="f" class="card" style="flex:2;min-width:280px">
+<h3>Datos del cliente</h3><div class="grid2"><label>Nombre<input name="nombre" required value="María"></label><label>Apellido<input name="apellido" required value="Gómez"></label>
+<label>Teléfono / WhatsApp<input name="tel" required value="0981 123 456"></label><label>Email<input name="email" type="email" value="cliente@example.com"></label>
+<label>Dirección<input name="dir" value="Av. España 1234"></label><label>Ciudad<input name="ciudad" value="Asunción"></label></div>
+<h3>Pago</h3><label style="display:flex;gap:8px;align-items:center"><input type="radio" checked style="width:auto"> Pago contra entrega / al retirar en la galería</label>
+<p class="muted">Demostración: no se cobra ni se envía nada.</p><button class="btn gold" style="width:100%;margin-top:10px">Realizar el pedido</button></form>
+<div class="card" style="flex:1;min-width:260px"><h3>Tu pedido</h3><div id="mini"></div></div></div></div>
+<script>var c=DEMO.cart();if(!c.length)location.href='cart.html';var t=c.reduce(function(a,i){return a+i.total},0);
+document.getElementById('mini').innerHTML=c.map(function(it){return '<div class="row" style="margin-bottom:10px"><img src="'+it.preview+'" style="width:60px;border-radius:4px"><div style="flex:1"><div style="font-size:13px;font-weight:600">'+it.name+'</div><div class="muted">'+it.specs[2][1]+'</div></div><b>'+DEMO.gs(it.total)+'</b></div>'}).join('')+'<div class="tot"><b>Total</b><span class="price">'+DEMO.gs(t)+'</span></div><div class="muted">IVA 10% incluido</div>';
+document.getElementById('f').onsubmit=function(e){e.preventDefault();var d=Object.fromEntries(new FormData(this));var o={n:1000+Math.floor(Math.random()*9000),date:new Date().toLocaleString('es-PY'),cliente:d,items:c,total:t};DEMO.set('demo_order',o);DEMO.set('demo_cart',[]);location.href='order.html';};</script></body></html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><script src="demo-common.js"></script><script src="demo-studio.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#0e0d0b">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Enmarcado Studio Pro</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<script src="tailwind.js"></script>
+<style>
+  :root{
+    --ink:#0e0d0b; --panel:#15130f; --panel2:#1c1a15; --line:#2c2820; --cream:#efe7d6; --muted:#a59d8c; --gold:#c9a45c; --gold2:#e6c987;
+    --sat:env(safe-area-inset-top,0px); --sab-env:env(safe-area-inset-bottom,0px); --nav-fallback:0px;
+    --sab:max(var(--sab-env),var(--nav-fallback),10px); --app-h:100dvh;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  html,body{height:100%;height:100vh;height:var(--app-h);margin:0;padding:0;background:var(--ink);color:var(--cream);
+    font-family:Inter,system-ui,sans-serif;overflow:hidden;overscroll-behavior:none;font-feature-settings:"cv11","ss01"}
+  body{padding-top:var(--sat);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .serif{font-family:"Cormorant Garamond",Georgia,serif}
+  .safe-dock-padding{padding-bottom:var(--sab)}
+  #sabProbe{position:fixed;left:0;bottom:0;width:1px;height:env(safe-area-inset-bottom,0px);pointer-events:none;visibility:hidden}
+  .hide-scroll{display:flex;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x proximity}
+  .hide-scroll::-webkit-scrollbar{display:none}
+  .ico{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .ico-s{width:16px;height:16px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border-radius:999px;font-size:11.5px;font-weight:600;letter-spacing:.02em;transition:transform .15s,background .2s,color .2s,border-color .2s}
+  .btn:active{transform:scale(.95)}
+  .btn-ghost{background:rgba(239,231,214,.06);border:1px solid var(--line);color:var(--cream);padding:7px 11px}
+  .btn-gold{background:linear-gradient(180deg,#e2c27c,#b88f45);color:#1a140a;padding:7px 12px;box-shadow:0 2px 10px rgba(201,164,92,.25)}
+  .chip{padding:4px 11px;border-radius:999px;font-size:10.5px;font-weight:600;letter-spacing:.04em;border:1px solid var(--line);color:var(--muted);background:transparent;flex-shrink:0;transition:all .2s}
+  .kb-modal{padding-top:calc(env(safe-area-inset-top) + 12px)!important;padding-bottom:calc(var(--kb,0px) + 12px)!important;transition:padding-bottom .18s}
+  .kb-modal .kb-inner{max-height:100%}
+  body.kb-open .kb-modal{align-items:flex-end}
+  #frameEditor,#catalogSheet{padding-bottom:var(--kb,0px)}
+  .chip:disabled{cursor:not-allowed}
+  :root{color-scheme:dark}
+  input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=color]):not([type=file]),select,textarea{background-color:#1c1a17!important;color:#f3ede2!important;-webkit-text-fill-color:#f3ede2!important;caret-color:#e6c987;border:1px solid rgba(201,164,92,.45)!important;color-scheme:dark;border-radius:10px;min-width:0;max-width:100%}
+  input::placeholder,textarea::placeholder{color:#8f877a!important;-webkit-text-fill-color:#8f877a!important;opacity:1}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:#e6c987!important;box-shadow:0 0 0 2px rgba(230,201,135,.25)}
+  input:-webkit-autofill,input:-webkit-autofill:focus{-webkit-box-shadow:0 0 0 1000px #1c1a17 inset!important;-webkit-text-fill-color:#f3ede2!important}
+  select option{background:#1c1a17;color:#f3ede2}
+  .fe-in{display:block;width:100%;margin-top:3px;padding:8px 9px;font-size:13px}
+  input[type=file]{color:#c9bfae;font-size:11px;max-width:100%}
+  input[type=file]::file-selector-button{background:#2a261f;color:#f3ede2;border:1px solid rgba(201,164,92,.5);border-radius:999px;padding:6px 12px;margin-right:8px;font-weight:600}
+  .chip.on{background:var(--cream);color:#16130d;border-color:var(--cream)}
+  .card{background:var(--panel2);border:1px solid var(--line);border-radius:14px}
+  .frame-card{flex-shrink:0;scroll-snap-align:start;transition:transform .2s,border-color .2s,box-shadow .2s}
+  .frame-card.active{border-color:var(--gold)!important;box-shadow:0 0 0 1px var(--gold),0 8px 22px rgba(0,0,0,.6);transform:translateY(-2px)}
+  input[type=range]{-webkit-appearance:none;background:linear-gradient(90deg,#3a3428,#2a261f);height:4px;border-radius:999px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f4dfa8,#b88f45);border:1px solid #f6e7bf;box-shadow:0 2px 8px rgba(0,0,0,.7)}
+  input[type=number]{user-select:text;-webkit-user-select:text}
+  .spinner{width:34px;height:34px;border:2px solid #3a3428;border-top-color:var(--gold);border-radius:50%;animation:sp .9s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .fade-in{animation:fi .28s ease both}@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .nav-tab{color:#7d7566;transition:color .2s}
+  .nav-tab.on{color:var(--gold2)}
+  .nav-tab .dot{width:4px;height:4px;border-radius:50%;background:transparent;margin-top:3px;transition:background .2s}
+  .nav-tab.on .dot{background:var(--gold)}
+  .lbl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .toggle{width:34px;height:20px;border-radius:999px;background:#3a3428;position:relative;transition:background .2s;flex-shrink:0}
+  .toggle::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--cream);transition:transform .2s}
+  .toggle.on{background:var(--gold)}.toggle.on::after{transform:translateX(14px)}
+  select{background:var(--panel2);border:1px solid var(--line);color:var(--cream);border-radius:8px}
+  .xbar{scrollbar-width:thin;scrollbar-color:#c9a45c #221e17;padding-bottom:3px;-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:28px}
+  #navWallN:empty{display:none}
+  .xbar::-webkit-scrollbar{height:3px;display:block}.xbar::-webkit-scrollbar-thumb{background:#c9a45c;border-radius:3px}.xbar::-webkit-scrollbar-track{background:#221e17}
+</style>
+<link rel="stylesheet" href="desktop.css">
+</head>
+<body class="flex flex-col select-none overflow-hidden">
+<div id="sabProbe"></div>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="i-frame" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="7" y="7" width="10" height="10"/><path d="M3 3l4 4M21 3l-4 4M21 21l-4-4M3 21l4-4"/></symbol>
+  <symbol id="i-mat" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><rect x="8" y="8" width="8" height="8"/></symbol>
+  <symbol id="i-corners" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/><path d="M8 8l8 1-1 7-7-1z"/></symbol>
+  <symbol id="i-room" viewBox="0 0 24 24"><path d="M3 20V8l9-5 9 5v12"/><path d="M3 20h18"/><rect x="9" y="9" width="6" height="5"/><path d="M6 20v-3h12v3"/></symbol>
+  <symbol id="i-light" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-sheet" viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6M9 13h8M9 17h6"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 8h4l2-3h6l2 3h4v12H3z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+  <symbol id="i-ar" viewBox="0 0 24 24"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 11l8-4.5M12 11v9M12 11L4 6.5"/></symbol>
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+  <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+  <symbol id="i-ruler" viewBox="0 0 24 24"><path d="M3 17L17 3l4 4L7 21z"/><path d="M7 13l2 2M10 10l2 2M13 7l2 2"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="1"/><circle cx="9" cy="10" r="2"/><path d="M21 17l-5-5-9 8"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18v.5"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></symbol>
+  <symbol id="i-studio" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="13" rx="1"/><path d="M9 21h6M12 16v5"/></symbol>
+</svg>
+
+<header class="h-14 px-4 flex items-center justify-between shrink-0 z-30" style="background:linear-gradient(180deg,#14120e,#100f0c);border-bottom:1px solid var(--line)">
+  <div class="flex items-center gap-2.5 min-w-0">
+    <div class="w-8 h-8 rounded-md flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#e6c987,#9c7434);box-shadow:inset 0 0 0 2px #1a140a,0 0 0 1px #c9a45c">
+      <svg class="ico ico-s" style="stroke:#1a140a"><use href="#i-frame"/></svg></div>
+    <div class="min-w-0">
+      <h1 class="serif text-[19px] font-semibold leading-none tracking-wide" style="color:var(--cream)">Enmarcado <span style="color:var(--gold2)">Studio</span></h1>
+      <p id="topSizeIndicator" class="text-[10px] leading-none mt-1 truncate tabular-nums" style="color:var(--muted)">Luz: 60 x 90 cm</p>
+    </div>
+  </div>
+  <div class="flex items-center gap-1.5 shrink-0">
+    <input type="file" id="fileInput" accept="image/*" class="hidden">
+    <button id="btnUpload" class="btn btn-ghost" aria-label="Foto de la obra"><svg class="ico ico-s"><use href="#i-camera"/></svg>Obra</button>
+    <button id="btnAR" class="btn btn-ghost" aria-label="Realidad aumentada" style="border-color:rgba(201,164,92,.5);color:var(--gold2)"><svg class="ico ico-s"><use href="#i-ar"/></svg>AR</button>
+    <button id="btnARDiag" class="btn btn-ghost" aria-label="Diagnóstico AR" title="Diagnóstico AR" style="padding-left:8px;padding-right:8px">🩺</button>
+    <button id="btnExportTop" class="btn btn-gold" aria-label="Exportar ficha"><svg class="ico ico-s" style="stroke:#1a140a"><use href="#i-download"/></svg></button>
+  </div>
+</header>
+<div class="px-4 py-1 flex items-center justify-between shrink-0 z-20" style="background:#0f0e0b;border-bottom:1px solid var(--line)">
+  <span class="text-[10px]" style="color:var(--muted)">Presupuesto en vivo</span>
+  <button id="totalPill" class="btn py-1 px-3" style="background:linear-gradient(135deg,#e6c987,#b58d3e);color:#1a140a"><span class="text-[10px] font-semibold">Total</span><b class="serif text-[17px] tabular-nums">₲ 0</b><span class="text-[11px]">›</span></button>
+</div>
+
+<main id="viewportContainer" class="relative flex-1 min-h-0 flex items-center justify-center overflow-hidden" style="background:radial-gradient(ellipse at 50% 40%,#1b1915,#0b0a08 75%)">
+  <canvas id="viewCanvas" class="max-w-full max-h-full touch-none"></canvas>
+  <div id="roomBadge" class="hidden absolute top-2 left-2 right-2 flex justify-center pointer-events-none">
+    <div class="fade-in px-3 py-1.5 rounded-full text-[10.5px] flex items-center gap-1.5 max-w-full" style="background:rgba(14,13,11,.78);border:1px solid rgba(201,164,92,.45);backdrop-filter:blur(6px)">
+      <svg class="ico ico-s shrink-0" style="stroke:var(--gold2)"><use href="#i-ruler"/></svg><span id="lblRoomRef" class="truncate">—</span></div>
+  </div>
+
+  <div id="cropOverlay" class="absolute inset-0 hidden bg-black flex flex-col justify-between p-3 z-30">
+    <canvas id="cropCanvas" class="absolute inset-0 w-full h-full touch-none"></canvas>
+    <div class="relative z-20 mx-auto px-4 py-1.5 rounded-full text-[11px] flex items-center gap-2 pointer-events-none" style="background:rgba(14,13,11,.9);border:1px solid rgba(201,164,92,.6)">
+      <span class="w-2 h-2 rounded-full animate-pulse" style="background:var(--gold)"></span><span id="cropHint">Ajusta las 4 esquinas (lupa activa)</span>
+    </div>
+    <div class="relative z-20 flex justify-center flex-wrap gap-2 mb-1">
+      <button id="btnApplyCrop" class="btn btn-gold"><svg class="ico ico-s" style="stroke:#1a140a"><use href="#i-check"/></svg>Rectificar</button>
+      <button id="btnAutoReDetect" class="btn btn-ghost"><svg class="ico ico-s"><use href="#i-spark"/></svg>Auto detectar</button>
+      <button id="btnCancelCrop" class="btn btn-ghost" aria-label="Cancelar"><svg class="ico ico-s"><use href="#i-x"/></svg></button>
+    </div>
+  </div>
+  <div id="touchLoupe" class="absolute pointer-events-none hidden rounded-full w-32 h-32 overflow-hidden z-50 bg-black" style="border:2px solid var(--gold);box-shadow:0 10px 35px rgba(0,0,0,.9)">
+    <canvas id="loupeCanvas" width="128" height="128" class="w-full h-full"></canvas>
+    <div class="absolute inset-0 flex items-center justify-center"><div class="w-8 h-px" style="background:var(--gold2)"></div><div class="h-8 w-px absolute" style="background:var(--gold2)"></div></div>
+  </div>
+  <div id="busy" class="absolute inset-0 hidden z-40 flex flex-col items-center justify-center gap-3 text-xs" style="background:rgba(10,9,7,.78)">
+    <div class="spinner"></div><span id="busyMsg" class="serif text-[17px] italic" style="color:var(--cream)">Detectando la obra…</span>
+  </div>
+  <div id="toast" class="absolute bottom-3 text-xs px-4 py-2 rounded-full pointer-events-none opacity-0 transition-opacity duration-300 z-50 flex items-center gap-2" style="background:rgba(21,19,15,.95);border:1px solid rgba(201,164,92,.5)">
+    <svg class="ico ico-s" style="stroke:var(--gold2)"><use id="toastIcon" href="#i-check"/></svg><span id="toastMsg">Listo</span>
+  </div>
+</main>
+
+<section id="dock" class="flex flex-col shrink-0 z-20 safe-dock-padding" style="background:var(--panel);border-top:1px solid var(--line);box-shadow:0 -16px 40px rgba(0,0,0,.55)">
+  <div id="subpanelContainer" class="h-[200px] px-3 pt-2.5 pb-1 overflow-hidden flex flex-col">
+
+    <div id="tabContent-frames" class="tab-pane h-full flex flex-col gap-2">
+      <div class="hide-scroll gap-1.5 shrink-0">
+        <button id="btnMyFrames" class="chip" style="border-color:var(--gold);color:var(--gold2)">＋ Mis marcos</button>
+        <span id="chipOnlyMine" class="chip hidden" style="background:var(--gold);color:#1a140a;border-color:var(--gold)">Solo míos</span>
+        <button class="cat-pill chip on" data-cat="all">Todas · 52</button>
+        <button class="cat-pill chip" data-cat="propio">Propios</button>
+        <button class="cat-pill chip" data-cat="rococo">Rococó y barroco</button>
+        <button class="cat-pill chip" data-cat="madera">Maderas</button>
+        <button class="cat-pill chip" data-cat="liso">Lisos</button>
+        <button class="cat-pill chip" data-cat="metal">Metálicos</button>
+        <button class="cat-pill chip" data-cat="cajon">Cajón 3D</button>
+      </div>
+      <div id="framesScroller" class="hide-scroll gap-2.5 items-stretch flex-1 min-h-0 py-1"></div>
+      <div class="flex items-center justify-between gap-3 text-[11px] shrink-0 pb-1">
+        <div class="flex items-center gap-1.5">
+          <button id="btnModeClassic" class="chip on">Clásico</button>
+          <button id="btnModeBox" class="chip">Cajón 3D</button>
+        </div>
+        <div class="flex items-center gap-2 flex-1 justify-end">
+          <span class="lbl">Ancho</span>
+          <input type="range" id="rngFrameW" min="1.5" max="15" step="0.5" value="8" class="w-24">
+          <span id="fixedWidthNote" class="hidden text-[10px] leading-tight text-right flex-1 whitespace-pre-line" style="color:var(--gold2)"></span><span id="lockFrameW" class="hidden"></span><span id="lblFrameW" class="tabular-nums font-semibold w-12 text-right" style="color:var(--gold2)">8.0 cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="tabContent-passepartout" class="tab-pane h-full hidden flex flex-col justify-between gap-1.5 overflow-y-auto">
+      <div id="glassRow" class="flex items-center gap-1.5 text-xs">
+        <span class="lbl shrink-0">Vidrio</span>
+        <button class="gl-chip chip py-1" data-g="none">Sin</button><button class="gl-chip chip py-1" data-g="glass">Vidrio</button><button class="gl-chip chip py-1" data-g="double">Doble</button><span class="w-px h-4" style="background:var(--line)"></span><button class="gf-chip chip py-1" data-f="brillo">Brillante</button><button class="gf-chip chip py-1" data-f="mate">Mate</button>
+      </div>
+      <div id="glassMarginRow" class="hidden flex items-center gap-3 text-xs"><span class="lbl shrink-0">Margen vidrio</span><input type="range" id="rngGlassM" min="1" max="20" step="0.5" value="5" class="flex-1"><b id="lblGlassM" class="tabular-nums w-12 text-right" style="color:var(--gold2)">5.0 cm</b></div>
+      <p id="glassHint" class="text-[9.5px] -mt-1" style="color:var(--muted)"></p>
+      <div class="flex items-center justify-between gap-3 text-xs">
+        <span class="lbl shrink-0">Paspartú</span>
+        <input type="range" id="rngPassW" min="0" max="15" step="0.5" value="5" class="flex-1">
+        <b id="lblPassW" class="tabular-nums w-12 text-right" style="color:var(--gold2)">5.0 cm</b>
+        <button id="btnPassZero" class="chip">Sin</button>
+        <button id="btnPlaque" class="chip" style="border-color:var(--gold);color:var(--gold2)">＋ Epígrafe</button>
+      </div>
+      <div class="flex items-center gap-2">
+        <div id="passColorScroller" class="hide-scroll gap-2 items-center py-1 flex-1"></div>
+        <input type="color" id="passCustomColor" value="#f3efe6" class="w-8 h-8 rounded-full bg-transparent shrink-0" style="border:1px solid var(--line)">
+      </div>
+      <div class="card p-2.5 flex items-center justify-between gap-2 text-xs">
+        <label class="flex items-center gap-2 font-semibold"><input type="checkbox" id="chkFilete" checked class="w-4 h-4" style="accent-color:#c9a45c">Filete</label>
+        <div id="fileteControls" class="flex items-center gap-2">
+          <select id="selFileteColor" class="text-[11px] px-1.5 py-1">
+            <option value="gold_antique" selected>Oro envejecido</option><option value="gold_bright">Oro brillante</option>
+            <option value="silver">Plata</option><option value="bronze">Bronce</option><option value="ebony_gold">Ébano y oro</option>
+          </select>
+          <input type="range" id="rngFileteW" min="0.4" max="2.0" step="0.2" value="0.8" class="w-16">
+          <span id="lblFileteW" class="text-[10px] tabular-nums" style="color:var(--gold2)">0.8cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="tabContent-crop" class="tab-pane h-full hidden flex flex-col justify-around gap-2 text-xs">
+      <div class="grid grid-cols-5 gap-1.5">
+        <button id="btnRunScannerAuto" class="card py-2.5 flex flex-col items-center gap-1 active:scale-95 transition" style="border-color:rgba(201,164,92,.5)"><svg class="ico" style="stroke:var(--gold2)"><use href="#i-spark"/></svg><span class="text-[10px]">Detectar</span></button>
+        <button id="btnOpenManualCorners" class="card py-2.5 flex flex-col items-center gap-1 active:scale-95 transition"><svg class="ico"><use href="#i-corners"/></svg><span class="text-[10px]">Esquinas</span></button>
+        <button id="btnRotate90" class="card py-2.5 flex flex-col items-center gap-1 active:scale-95 transition"><svg class="ico"><use href="#i-rotate"/></svg><span class="text-[10px]">Rotar</span></button>
+        <button id="btnReopenDimensionModal" class="card py-2.5 flex flex-col items-center gap-1 active:scale-95 transition"><svg class="ico"><use href="#i-ruler"/></svg><span class="text-[10px]">Medidas</span></button>
+        <button id="btnDemo" class="card py-2.5 flex flex-col items-center gap-1 active:scale-95 transition"><svg class="ico"><use href="#i-image"/></svg><span class="text-[10px]">Demo</span></button>
+      </div>
+      <div class="card p-2.5 text-center text-[11px] tabular-nums" style="color:var(--muted)">
+        Proporción objetivo <b id="lblAspectTarget" style="color:var(--gold2)">60 x 90 cm</b> · <span id="lblDetectInfo">—</span>
+      </div>
+    </div>
+
+    <div id="tabContent-rooms" class="tab-pane h-full hidden flex flex-col gap-2">
+      <div id="roomsScroller" class="hide-scroll gap-2 items-stretch flex-1 min-h-0"></div>
+      <input type="file" id="roomFileInput" accept="image/*" class="hidden">
+      <input type="file" id="roomCameraInput" accept="image/*" capture="environment" class="hidden">
+      <div id="roomControls" class="flex items-center gap-2 text-[11px] shrink-0">
+        <button id="btnLockScale" class="flex items-center gap-1.5"><span id="tglLock" class="toggle on"></span><span class="font-semibold">Escala real</span></button>
+        <input type="range" id="rngRoomScale" min="30" max="300" step="1" value="100" class="flex-1">
+        <span id="lblRoomScale" class="tabular-nums w-10 text-right" style="color:var(--gold2)">100%</span>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0 pb-1">
+        <button id="btnRoomCamera" class="btn btn-ghost px-2"><svg class="ico ico-s"><use href="#i-camera"/></svg>Tomar foto</button>
+        <button id="btnPersp" class="btn btn-ghost px-2"><svg class="ico ico-s"><use href="#i-corners"/></svg>Perspectiva</button>
+        <button id="btnMeasure" class="btn btn-ghost px-2 flex-1 justify-center"><svg class="ico ico-s"><use href="#i-ruler"/></svg>Medir</button>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0 pb-1">
+        <button id="btnSaveRoom" class="btn btn-gold flex-1 justify-center"><svg class="ico ico-s" style="stroke:#1a140a"><use href="#i-download"/></svg>Guardar imagen</button>
+        <button id="btnShareRoom" class="btn btn-ghost px-2" aria-label="Compartir"><svg class="ico ico-s"><use href="#i-share"/></svg>Compartir</button>
+        <button id="btnAnalysis" class="btn btn-ghost px-2" aria-label="Análisis"><svg class="ico ico-s"><use href="#i-eye"/></svg></button>
+        <button id="btnExitRoom" class="btn btn-ghost px-2" aria-label="Estudio"><svg class="ico ico-s"><use href="#i-studio"/></svg></button>
+      </div>
+      <div id="perspPanel" class="hidden absolute left-3 right-3 bottom-[calc(var(--sab)+70px)] card p-3 fade-in z-40" style="background:#1c1a15">
+        <p class="text-[11.5px] mb-2" style="color:var(--cream)"><b style="color:var(--gold2)">Ajustar perspectiva:</b> lleva las 4 asas a las esquinas de un rectángulo de la pared (ventana, puerta, cuadro, zócalo). Las líneas <span style="color:#78c8ff">azules</span> siguen los bordes horizontales y las <span style="color:#ffaa5a">naranjas</span> las verticales. Arrastra dentro para mover todo.</p>
+        <div class="flex gap-2"><button id="btnPerspCancel" class="btn btn-ghost">Cancelar</button><button id="btnPerspReset" class="btn btn-ghost">Reiniciar</button><button id="btnPerspOk" class="btn btn-gold flex-1 justify-center">Listo</button></div>
+      </div>
+      <div id="measurePanel" class="hidden absolute left-3 right-3 bottom-[calc(var(--sab)+70px)] card p-3 flex items-center gap-2 fade-in z-40" style="background:#1c1a15">
+        <span class="text-[11px] flex-1" id="measureHint">Arrastra una línea sobre un objeto conocido</span>
+        <input id="inMeasureCm" type="number" inputmode="decimal" placeholder="cm" class="w-20 rounded-lg px-2 py-1.5 text-center text-sm font-semibold focus:outline-none" style="background:#0e0d0b;border:1px solid var(--line);color:var(--cream)">
+        <button id="btnApplyMeasure" class="btn btn-gold">OK</button>
+        <button id="btnCancelMeasure" class="btn btn-ghost"><svg class="ico ico-s"><use href="#i-x"/></svg></button>
+      </div>
+    </div>
+
+    <div id="tabContent-adjust" class="tab-pane h-full hidden flex flex-col justify-between gap-2 text-xs">
+      <div class="grid grid-cols-3 gap-3 card p-3">
+        <div><div class="flex justify-between mb-2"><span class="lbl">Brillo</span><span id="lblBri" class="tabular-nums">100%</span></div><input type="range" id="rngBri" min="70" max="140" value="100" class="w-full"></div>
+        <div><div class="flex justify-between mb-2"><span class="lbl">Contraste</span><span id="lblCon" class="tabular-nums">100%</span></div><input type="range" id="rngCon" min="70" max="150" value="100" class="w-full"></div>
+        <div><div class="flex justify-between mb-2"><span class="lbl">Sombra</span><span id="lblShadow">Media</span></div><input type="range" id="rngShadow" min="10" max="45" value="25" class="w-full"></div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="lbl shrink-0">Pared</span>
+        <div class="hide-scroll gap-2 items-center flex-1 py-1">
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0 ring-2 ring-[#c9a45c]" style="background:#eae6dd" data-wall="#eae6dd" aria-label="Blanco yeso"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#c9ccc8" data-wall="#c9ccc8" aria-label="Gris nórdico"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#d9cbb2" data-wall="#d9cbb2" aria-label="Arena"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#1f2d40" data-wall="#1f2d40" aria-label="Azul colonial"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#4b5548" data-wall="#4b5548" aria-label="Verde salvia"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#8c4e3e" data-wall="#8c4e3e" aria-label="Terracota"></button>
+          <button class="wall-btn w-8 h-8 rounded-full shrink-0" style="background:#1b1a18" data-wall="#1b1a18" aria-label="Antracita"></button>
+        </div>
+        <button id="btnWallUpload" class="hidden"></button><input type="file" id="wallFileInput" accept="image/*" class="hidden">
+      </div>
+    </div>
+
+    <div id="tabContent-sheet" class="tab-pane h-full hidden flex flex-col justify-between gap-1.5 text-xs overflow-y-auto">
+      <div class="grid grid-cols-3 gap-2">
+        <div class="card px-2 py-1 text-center"><span class="lbl block">Ancho obra</span>
+          <input type="number" inputmode="decimal" id="inArtW" value="60" min="5" max="300" class="w-full bg-transparent text-center text-base serif font-semibold focus:outline-none" style="color:var(--gold2)"></div>
+        <div class="card px-2 py-1 text-center"><span class="lbl block">Alto obra</span>
+          <input type="number" inputmode="decimal" id="inArtH" value="90" min="5" max="300" class="w-full bg-transparent text-center text-base serif font-semibold focus:outline-none" style="color:var(--gold2)"></div>
+        <div class="card px-2 py-1 text-center" style="border-color:rgba(201,164,92,.5)"><span class="lbl block">Exterior</span>
+          <span id="txtSheetTotal" class="block text-base serif font-semibold mt-0.5 tabular-nums">—</span></div>
+      </div>
+      <div class="card px-2 py-1.5"><div class="flex justify-between items-baseline mb-1"><span class="lbl">Grosor del bastidor (cm)</span><span class="text-[10px]" style="color:var(--muted)">Prof. total <b id="txtSheetDepth" class="serif text-sm" style="color:var(--gold2)">—</b> cm</span></div>
+        <div class="flex gap-1 items-center" data-stgroup><button type="button" class="st-preset chip py-1 px-2 flex-1" data-d="1.8">1.8</button><button type="button" class="st-preset chip py-1 px-2 flex-1" data-d="2.5">2.5</button><button type="button" class="st-preset chip py-1 px-2 flex-1" data-d="3.5">3.5</button><button type="button" class="st-preset chip py-1 px-2 flex-1" data-d="4.5">4.5</button><button type="button" class="st-preset chip py-1 px-2" data-d="custom">Otro</button><input type="number" inputmode="decimal" id="inStretcher" value="2.5" min="0.5" max="20" step="0.1" class="w-[54px] bg-transparent text-center serif text-base font-semibold focus:outline-none rounded-lg" style="border:1px solid var(--line);color:var(--gold2)"></div>
+        <p id="txtDepthDetail" class="text-[9.5px] mt-1 truncate" style="color:var(--muted)"></p></div>
+      <div class="flex gap-2 pb-1">
+        <button id="btnDownloadWorksheet" class="btn btn-gold flex-1 justify-center py-2"><svg class="ico ico-s" style="stroke:#1a140a"><use href="#i-sheet"/></svg>Ficha técnica HD</button>
+        <button id="btnDownloadImageOnly" class="btn btn-ghost py-2"><svg class="ico ico-s"><use href="#i-image"/></svg>Solo cuadro</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="h-[58px] grid grid-cols-7 items-center px-1 shrink-0" style="background:#0f0e0b;border-top:1px solid var(--line)">
+    <button class="nav-tab on flex flex-col items-center" data-tab="frames"><svg class="ico"><use href="#i-frame"/></svg><span class="text-[10px] font-medium mt-1">Molduras</span><span class="dot"></span></button>
+    <button class="nav-tab flex flex-col items-center" data-tab="passepartout"><svg class="ico"><use href="#i-mat"/></svg><span class="text-[10px] font-medium mt-1">Paspartú</span><span class="dot"></span></button>
+    <button class="nav-tab flex flex-col items-center" data-tab="crop"><svg class="ico"><use href="#i-corners"/></svg><span class="text-[10px] font-medium mt-1">Obra</span><span class="dot"></span></button>
+    <button class="nav-tab flex flex-col items-center" data-tab="rooms"><svg class="ico"><use href="#i-room"/></svg><span class="text-[10px] font-medium mt-1">Salas</span><span class="dot"></span></button>
+    <button class="nav-tab flex flex-col items-center" data-tab="adjust"><svg class="ico"><use href="#i-light"/></svg><span class="text-[10px] font-medium mt-1">Luz</span><span class="dot"></span></button>
+    <button class="nav-tab flex flex-col items-center" data-tab="sheet"><svg class="ico"><use href="#i-sheet"/></svg><span class="text-[10px] font-medium mt-1">Ficha</span><span class="dot"></span></button>
+    <button id="navWall" class="flex flex-col items-center relative" style="color:var(--gold2)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5" width="7" height="9" rx=".5"/><rect x="11.5" y="5" width="10" height="6" rx=".5"/><rect x="11.5" y="13" width="5" height="6" rx=".5"/><rect x="4.5" y="16" width="5" height="3" rx=".5"/></svg><span class="text-[10px] font-semibold mt-1 leading-none">Pared</span><span id="navWallN" class="absolute -top-1 right-1 text-[9px] font-bold rounded-full px-1" style="background:var(--gold);color:#1a140a"></span></button>
+  </nav>
+</section>
+
+<div id="dimensionModal" class="kb-modal fixed inset-0 z-50 hidden flex items-center justify-center p-4" style="background:rgba(8,7,5,.82);backdrop-filter:blur(6px)">
+  <div class="kb-inner fade-in w-full max-w-sm p-4 flex flex-col gap-3 rounded-2xl overflow-y-auto" style="background:#17150f;border:1px solid rgba(201,164,92,.4);box-shadow:0 30px 80px rgba(0,0,0,.7)">
+    <div>
+      <p class="lbl" style="color:var(--gold)">Paso 1</p>
+      <h2 class="serif text-[26px] font-semibold leading-tight mt-1">Medidas reales de la obra</h2>
+      <p class="text-[11.5px] mt-1" style="color:var(--muted)">Con la medida exacta, la detección y el enderezado son más precisos, y la sala y la AR muestran el tamaño real.</p>
+    </div>
+    <div><label class="lbl block mb-1.5">Tipo de obra</label>
+      <div class="grid grid-cols-2 gap-1.5"><button type="button" class="at-btn chip py-2 whitespace-normal leading-tight" data-t="canvas">Óleo / acrílico<br>con bastidor</button><button type="button" class="at-btn chip py-2 whitespace-normal leading-tight" data-t="paper">Papel / cartulina<br>(lleva vidrio)</button></div></div>
+    <div class="grid grid-cols-3 gap-1.5">
+      <button class="preset-btn chip py-2" data-w="30" data-h="40">30 × 40</button><button class="preset-btn chip py-2" data-w="40" data-h="50">40 × 50</button>
+      <button class="preset-btn chip py-2" data-w="50" data-h="70">50 × 70</button><button class="preset-btn chip py-2" data-w="60" data-h="80">60 × 80</button>
+      <button class="preset-btn chip py-2" data-w="60" data-h="90">60 × 90</button><button class="preset-btn chip py-2" data-w="80" data-h="120">80 × 120</button>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="lbl block mb-1.5">Ancho (cm)</label>
+        <input type="number" inputmode="decimal" id="modalInputW" value="60" min="5" max="500" step="0.5" class="w-full rounded-xl p-2.5 serif text-xl font-semibold text-center focus:outline-none" style="background:#0e0d0b;border:1px solid var(--line);color:var(--cream)"></div>
+      <div><label class="lbl block mb-1.5">Alto (cm)</label>
+        <input type="number" inputmode="decimal" id="modalInputH" value="90" min="5" max="500" step="0.5" class="w-full rounded-xl p-2.5 serif text-xl font-semibold text-center focus:outline-none" style="background:#0e0d0b;border:1px solid var(--line);color:var(--cream)"></div>
+    </div>
+    <div><label class="lbl block mb-1.5">Vidrio</label>
+      <div class="grid grid-cols-3 gap-1.5"><button type="button" class="gl-btn chip py-2" data-g="none">Sin vidrio</button><button type="button" class="gl-btn chip py-2" data-g="glass">Vidrio</button><button type="button" class="gl-btn chip py-2" data-g="double">Doble vidrio</button></div>
+      <p id="modalPaperNote" class="hidden text-[10.5px] mt-1" style="color:#e8c66a">El papel o la cartulina necesita vidrio sí o sí: “Sin vidrio” no está disponible. Doble vidrio: la obra flota y el vidrio hace de paspartú.</p></div>
+    <div id="modalStretcherBlock"><label class="lbl block mb-1.5">Grosor del bastidor (cm)</label>
+      <div class="flex gap-1 items-center" data-stgroup><button type="button" class="st-preset chip py-1.5 px-2 flex-1" data-d="1.8">1.8</button><button type="button" class="st-preset chip py-1.5 px-2 flex-1" data-d="2.5">2.5</button><button type="button" class="st-preset chip py-1.5 px-2 flex-1" data-d="3.5">3.5</button><button type="button" class="st-preset chip py-1.5 px-2 flex-1" data-d="4.5">4.5</button><button type="button" class="st-preset chip py-1.5 px-2" data-d="custom">Otro</button><input type="number" inputmode="decimal" id="modalStretcher" value="2.5" min="0.5" max="20" step="0.1" class="w-[64px] rounded-xl p-1.5 serif text-lg font-semibold text-center focus:outline-none" style="background:#0e0d0b;border:1px solid var(--line);color:var(--cream)"></div>
+      <p class="text-[10.5px] mt-1" style="color:var(--muted)">Profundidad del lienzo con su bastidor; se usa para el volumen en salas y RA.</p></div>
+    <div class="flex gap-2">
+      <button id="btnCancelDimensions" class="btn btn-ghost justify-center px-4 py-2.5">Cancelar</button>
+      <button id="btnConfirmDimensions" class="btn btn-gold flex-1 justify-center py-2.5">Detectar obra</button>
+    </div>
+  </div>
+</div>
+<div id="plaqueSheet" class="kb-modal fixed inset-0 z-50 hidden flex items-end justify-center" style="background:rgba(8,7,5,.6)">
+  <div class="kb-inner w-full max-w-md m-3 p-4 rounded-2xl flex flex-col gap-2.5 overflow-y-auto" style="background:#17150f;border:1px solid rgba(201,164,92,.4)">
+    <div class="flex items-center justify-between"><h2 class="serif text-[22px] font-semibold">Epígrafe</h2><label class="flex items-center gap-2 text-[12px] font-semibold"><input id="plOn" type="checkbox" class="w-5 h-5" style="accent-color:#c9a45c">Mostrar</label></div>
+    <div class="grid grid-cols-3 gap-2 text-[11px]">
+      <label class="col-span-3">Título<input id="plTitle" class="fe-in"></label>
+      <label class="col-span-2">Artista<input id="plArtist" class="fe-in"></label><label>Año<input id="plYear" class="fe-in" inputmode="numeric"></label>
+      <label>Ancho (cm)<input id="plW" class="fe-in" type="number" inputmode="decimal" step="0.5"></label><label>Alto (cm)<input id="plH" class="fe-in" type="number" inputmode="decimal" step="0.5"></label>
+      <label>Acabado<select id="plFinish" class="fe-in"><option value="gold"></option><option value="silver"></option><option value="chromeGold"></option><option value="chromeSilver"></option></select></label>
+    </div>
+    <div class="flex items-center gap-1.5 text-[11px]"><span class="lbl">Posición</span><button class="pl-pos chip py-1.5" data-p="left">Izquierda</button><button class="pl-pos chip py-1.5" data-p="center">Centro</button><button class="pl-pos chip py-1.5" data-p="right">Derecha</button></div>
+    <div class="flex items-center gap-2 text-[11px]"><span class="lbl">Altura en el margen</span><input id="plVy" type="range" min="0" max="100" value="50" class="flex-1"></div>
+    <p id="plWarn" class="hidden text-[11px]" style="color:#e8c66a"></p>
+    <div class="flex gap-2"><button id="plRemove" class="btn btn-ghost px-4 py-2.5">Eliminar epígrafe</button><button id="plClose" class="btn btn-gold flex-1 justify-center py-2.5">Listo</button></div>
+  </div></div>
+
+
+<script src="detector.js"></script>
+<script src="frames.js"></script>
+<script src="rooms.js"></script>
+<script src="ar.js"></script>
+<script src="app.js"></script>
+<script src="catalog.js"></script>
+<script src="pricing.js"></script>
+<script src="extras.js"></script>
+<script src="wall.js"></script>
+
+
+<script src="dpi.js"></script>
+<script src="nav.js"></script>
+<script src="wp.js"></script>
+</body>
+</html>

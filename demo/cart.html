@@ -1,0 +1,11 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Carrito · Demo – Galería Viedma</title><link rel="stylesheet" href="demo.css"><script src="demo-common.js"></script></head><body>
+<div class="top"><div style="display:flex;align-items:center;gap:10px"><b>Galería Viedma</b><span class="demo">DEMO</span></div><nav><a href="./" class="NAV1">Enmarcá tu obra</a><a href="cart.html" class="on">Carrito <span id="cc"></span></a><a href="admin.html" class="NAV3">Administración</a></nav></div>
+<script>document.getElementById("cc").textContent="("+DEMO.cart().length+")"</script>
+<div class="wrap"><h1>Carrito</h1><div id="list"></div><div id="sum" class="card"></div></div>
+<script>
+function render(){var c=DEMO.cart(),L=document.getElementById('list');L.innerHTML='';
+ if(!c.length){L.innerHTML='<div class="card"><p>Tu carrito está vacío.</p><a class="btn gold" href="./">Diseñar un enmarcado</a></div>';document.getElementById('sum').style.display='none';return;}
+ c.forEach(function(it,i){var d=document.createElement('div');d.className='card row';d.innerHTML='<img src="'+it.preview+'" style="width:160px;max-width:40%;border-radius:6px;box-shadow:0 4px 14px rgba(0,0,0,.2)"><div style="flex:1;min-width:220px"><h3 style="margin:0 0 8px">'+it.name+'</h3><dl class="specs">'+it.specs.map(function(s){return '<dt>'+s[0]+'</dt><dd>'+s[1]+'</dd>'}).join('')+'</dl></div><div style="text-align:right;min-width:140px"><div class="price">'+DEMO.gs(it.total)+'</div><div class="muted">IVA '+it.iva+'% incluido</div><button class="btn ghost" style="margin-top:12px" data-i="'+i+'">Quitar</button></div>';L.appendChild(d);});
+ L.querySelectorAll('[data-i]').forEach(function(b){b.onclick=function(){var c=DEMO.cart();c.splice(+b.dataset.i,1);DEMO.set('demo_cart',c);location.reload();};});
+ var t=c.reduce(function(a,i){return a+i.total},0);document.getElementById('sum').innerHTML='<div class="tot"><span style="font-size:18px;font-weight:700">Total</span><span class="price">'+DEMO.gs(t)+'</span></div><p class="muted">IVA 10% incluido · envío a coordinar con la galería</p><div class="row" style="justify-content:flex-end"><a class="btn ghost" href="./">Seguir diseñando</a><a class="btn gold" href="checkout.html">Finalizar compra</a></div>';}
+render();</script></body></html>

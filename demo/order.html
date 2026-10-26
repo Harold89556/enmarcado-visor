@@ -1,0 +1,10 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pedido recibido · Demo – Galería Viedma</title><link rel="stylesheet" href="demo.css"><script src="demo-common.js"></script></head><body>
+<div class="top"><div style="display:flex;align-items:center;gap:10px"><b>Galería Viedma</b><span class="demo">DEMO</span></div><nav><a href="./" class="NAV1">Enmarcá tu obra</a><a href="cart.html" class="on">Carrito <span id="cc"></span></a><a href="admin.html" class="NAV3">Administración</a></nav></div>
+<script>document.getElementById("cc").textContent="("+DEMO.cart().length+")"</script>
+<div class="wrap"><div class="card" style="border-left:6px solid #2e9d4f"><h1 style="margin:0">¡Pedido recibido!</h1><p id="hd" class="muted"></p></div><div id="items"></div>
+<div class="card"><div class="tot"><span style="font-size:20px;font-weight:700">PRECIO FINAL</span><span class="price" id="tt"></span></div><p class="muted">IVA 10% incluido · Pago contra entrega · Demo – Galería Viedma</p>
+<a class="btn gold" href="./">Volver al estudio</a></div></div>
+<script>var o=DEMO.get('demo_order',null);if(!o)location.href='./';
+document.getElementById('hd').textContent='Pedido N° '+o.n+' · '+o.date+' · '+o.cliente.nombre+' '+o.cliente.apellido+' · '+o.cliente.tel+' · '+o.cliente.ciudad;
+document.getElementById('items').innerHTML=o.items.map(function(it){return '<div class="card row"><img src="'+it.preview+'" style="width:260px;max-width:100%;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,.25)"><div style="flex:1;min-width:240px"><h3 style="margin-top:0">'+it.name+'</h3><dl class="specs">'+it.specs.map(function(s){return '<dt>'+s[0]+'</dt><dd>'+s[1]+'</dd>'}).join('')+'</dl><p class="price" style="margin-top:14px">'+DEMO.gs(it.total)+' <span class="muted" style="font-weight:400">IVA 10% incl.</span></p></div></div>'}).join('');
+document.getElementById('tt').textContent=DEMO.gs(o.total);</script></body></html>
