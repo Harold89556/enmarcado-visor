@@ -1,0 +1,115 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta de enmarcado – Luis XIII Acanto · 8 cm</title>
+<meta name="description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta property="og:title" content="Propuesta de enmarcado – Luis XIII Acanto · 8 cm">
+<meta property="og:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta property="og:image" content="https://harold89556.github.io/enmarcado-visor/p/qmf6gbnac.jpg">
+<meta property="og:image:secure_url" content="https://harold89556.github.io/enmarcado-visor/p/qmf6gbnac.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://harold89556.github.io/enmarcado-visor/p/qmf6gbnac/">
+<meta property="og:site_name" content="Galería">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Propuesta de enmarcado – Luis XIII Acanto · 8 cm">
+<meta name="twitter:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta name="twitter:image" content="https://harold89556.github.io/enmarcado-visor/p/qmf6gbnac.jpg">
+<link rel="image_src" href="https://harold89556.github.io/enmarcado-visor/p/qmf6gbnac.jpg">
+<style>body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f4f1ea;color:#1d1d1f}header{padding:16px 18px 6px}h1{margin:0;font-size:13px;letter-spacing:.12em;color:#9a7322;text-transform:uppercase}h2{margin:4px 0 0;font-size:22px}
+#c{width:100%;height:58vh;display:block;background:#17150f;touch-action:none}.bar{display:flex;gap:8px;justify-content:center;padding:8px;flex-wrap:wrap}button{border:1px solid #9a7322;background:#fff;border-radius:20px;padding:7px 14px;font-size:14px;color:#5a420f}
+.sp{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 18px}.sp div{font-size:12px;color:#5b5b60}.sp b{display:block;font-size:14px;color:#1d1d1f}
+.pr{margin:14px 18px;background:#faf6ec;border-left:6px solid #9a7322;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}.pr b{font-size:26px;color:#7a5a14}footer{font-size:11px;color:#777;padding:6px 18px 24px}
+#land{padding:40px 22px;text-align:center}#land h2{font-family:Georgia,serif;font-size:30px;margin:10px 0}#land p{color:#5b5b60;line-height:1.5}.hid{display:none}
+#ogprev{display:block;max-width:min(92vw,640px);margin:12px auto;border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.35)}</style>
+</head><body>
+<div id="land"><h1>Galería</h1><h2>Cargando vista 3D…</h2>
+<img id="ogprev" src="../qmf6gbnac.jpg" width="1200" height="630" alt="Vista 3D del enmarcado">
+<p id="lmsg">Preparando el visor interactivo…</p></div>
+<div id="app" class="hid"><header><h1 id="biz"></h1><h2 id="ttl">Propuesta de enmarcado</h2></header>
+<canvas id="c"></canvas><div class="bar"><button id="f">Frente</button><button id="m">✋ Mover</button><button id="zi">＋</button><button id="zo">－</button><button id="r">↺</button></div>
+<p style="text-align:center;font-size:12px;color:#777;margin:0">1 dedo: girar · 2 dedos: mover y zoom · doble toque: reiniciar</p>
+<div class="sp" id="sp"></div><div class="pr"><div><div style="font-weight:700">PRECIO FINAL</div><div style="font-size:12px;color:#5b5b60" id="iva"></div></div><b id="price"></b></div>
+<footer id="foot"></footer></div>
+<script>
+function Viewer3D(cv,o){
+  var gl=cv.getContext('webgl',{antialias:true,preserveDrawingBuffer:true,alpha:false});if(!gl)return null;
+  var VS='attribute vec3 p;attribute vec3 n;attribute vec2 t;uniform mat4 M,P;varying vec3 vn,vp;varying vec2 vt;void main(){vec4 w=M*vec4(p,1.);vp=w.xyz;vn=mat3(M)*n;vt=t;gl_Position=P*w;}';
+  var FS='precision mediump float;varying vec3 vn,vp;varying vec2 vt;uniform sampler2D s;uniform vec4 c;uniform float mt,gls,amb,shin;uniform vec3 L,LC,E;void main(){vec3 N=normalize(vn);vec3 V=normalize(E-vp);vec3 H=normalize(L+V);'+
+   'vec4 b=mt>.5?texture2D(s,vt):c;float d=max(dot(N,L),0.);float sp=pow(max(dot(N,H),0.),shin);'+
+   'if(gls>0.){float f=pow(1.-max(dot(N,V),0.),3.);float band=smoothstep(.02,0.,abs(fract((vp.x*.7+vp.y)*.012+V.x*.6)-.5)-.12);gl_FragColor=vec4(LC*(sp*gls*1.6+band*gls*.35+f*.4),clamp(sp*gls+band*gls*.25+f*.3+.03,0.,.9));return;}'+
+   'gl_FragColor=vec4(b.rgb*LC*(amb+d*(1.-amb)*1.15)+LC*sp*.18,1.);}';
+  function sh(k,src){var x=gl.createShader(k);gl.shaderSource(x,src);gl.compileShader(x);return x;}
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,VS));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(pr);gl.useProgram(pr);
+  var U={};['M','P','s','c','mt','gls','amb','L','LC','E','shin'].forEach(function(k){U[k]=gl.getUniformLocation(pr,k);});
+  var W=o.W,H=o.H,D=Math.max(1,o.D),fw=o.fw,rec=Math.min(D*.8,Math.max(.6,o.rec||1.2)),x0=-W/2,y0=-H/2,x1=W/2,y1=H/2,ix0=x0+fw,iy0=y0+fw,ix1=x1-fw,iy1=y1-fw,zf=D,zi=D-rec;
+  var uv=function(x,y){return[(x-x0)/W,(y1-y)/H];};
+  var parts=[];function quad(ps,nrm,mode,col,uvs){var v=[];var idx=[0,1,2,0,2,3];idx.forEach(function(i){var q=ps[i],u=uvs?uvs[i]:uv(q[0],q[1]);v.push(q[0],q[1],q[2],nrm[0],nrm[1],nrm[2],u[0],u[1]);});parts.push({v:v,mode:mode,col:col});}
+  var ec=o.edge||[.4,.3,.2];
+  // frente de la moldura (anillo) con textura
+  quad([[x0,y1,zf],[x1,y1,zf],[ix1,iy1,zf],[ix0,iy1,zf]],[0,0,1],'t');quad([[ix0,iy0,zf],[ix1,iy0,zf],[x1,y0,zf],[x0,y0,zf]],[0,0,1],'t');
+  quad([[x0,y0,zf],[ix0,iy0,zf],[ix0,iy1,zf],[x0,y1,zf]],[0,0,1],'t');quad([[ix1,iy0,zf],[x1,y0,zf],[x1,y1,zf],[ix1,iy1,zf]],[0,0,1],'t');
+  // interior hundido (paspartú + obra)
+  quad([[ix0,iy0,zi],[ix1,iy0,zi],[ix1,iy1,zi],[ix0,iy1,zi]],[0,0,1],'t');
+  // paredes del galce (con el color del borde interior)
+  var ic=o.inner||ec;
+  quad([[ix0,iy1,zf],[ix1,iy1,zf],[ix1,iy1,zi],[ix0,iy1,zi]],[0,-1,0],'c',ic.map(function(x){return x*.75;}));quad([[ix0,iy0,zi],[ix1,iy0,zi],[ix1,iy0,zf],[ix0,iy0,zf]],[0,1,0],'c',ic);
+  quad([[ix0,iy0,zi],[ix0,iy0,zf],[ix0,iy1,zf],[ix0,iy1,zi]],[1,0,0],'c',ic);quad([[ix1,iy0,zf],[ix1,iy0,zi],[ix1,iy1,zi],[ix1,iy1,zf]],[-1,0,0],'c',ic.map(function(x){return x*.85;}));
+  // cantos exteriores (textura del borde estirada) y fondo
+  quad([[x0,y1,0],[x1,y1,0],[x1,y1,zf],[x0,y1,zf]],[0,1,0],'c',ec);quad([[x0,y0,zf],[x1,y0,zf],[x1,y0,0],[x0,y0,0]],[0,-1,0],'c',ec);
+  quad([[x0,y0,0],[x0,y0,zf],[x0,y1,zf],[x0,y1,0]],[-1,0,0],'c',ec);quad([[x1,y0,zf],[x1,y0,0],[x1,y1,0],[x1,y1,zf]],[1,0,0],'c',ec);
+  quad([[x1,y0,0],[x0,y0,0],[x0,y1,0],[x1,y1,0]],[0,0,-1],'c',[.36,.3,.24]);
+  if(o.glass&&o.glass!=='none')quad([[ix0,iy0,zf-.25],[ix1,iy0,zf-.25],[ix1,iy1,zf-.25],[ix0,iy1,zf-.25]],[0,0,1],'g');
+  parts.forEach(function(p){p.b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,p.b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(p.v),gl.STATIC_DRAW);});
+  var tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,o.img);['TEXTURE_WRAP_S','TEXTURE_WRAP_T'].forEach(function(k){gl.texParameteri(gl.TEXTURE_2D,gl[k],gl.CLAMP_TO_EDGE);});gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
+  var lp=gl.getAttribLocation(pr,'p'),ln=gl.getAttribLocation(pr,'n'),lt=gl.getAttribLocation(pr,'t');
+  var S={rx:-.18,ry:.42,z:1,px:0,py:0,k:1,L:o.light||{dir:[-.42,.62,.66],col:[1,1,1],amb:.4}};
+  function mul(a,b){var r=new Array(16);for(var i=0;i<4;i++)for(var j=0;j<4;j++){var s=0;for(var k=0;k<4;k++)s+=a[k*4+j]*b[i*4+k];r[i*4+j]=s;}return r;}
+  function rot(){var cx=Math.cos(S.rx),sx=Math.sin(S.rx),cy=Math.cos(S.ry),sy=Math.sin(S.ry);var X=[1,0,0,0,0,cx,sx,0,0,-sx,cx,0,0,0,0,1],Y=[cy,0,-sy,0,0,1,0,0,sy,0,cy,0,0,0,0,1];return mul(X,mul(Y,[1,0,0,0,0,1,0,0,0,0,1,0,0,0,-D/2,1]));}
+  function draw(){var w=cv.width,h=cv.height;gl.viewport(0,0,w,h);var bg=o.bg||[.09,.085,.075];gl.clearColor(bg[0],bg[1],bg[2],1);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);gl.enable(gl.DEPTH_TEST);
+    var a=w/h,f=1/Math.tan(.35),dist=Math.max(W/a,H)*1.25*f/2/S.z+D,n=1,fa=dist*4+500;
+    var P=[f/a,0,0,0,0,f,0,0,0,0,(fa+n)/(n-fa),-1,0,0,2*fa*n/(n-fa),0];P=mul(P,[1,0,0,0,0,1,0,0,0,0,1,0,0,0,-dist,1]);P=mul(P,[1,0,0,0,0,1,0,0,0,0,1,0,S.px,S.py,0,1]);S.k=(cv.clientHeight||h)/(2*dist*Math.tan(.35));
+    gl.uniformMatrix4fv(U.P,false,new Float32Array(P));gl.uniformMatrix4fv(U.M,false,new Float32Array(rot()));
+    var Ld=S.L.dir,ll=Math.hypot(Ld[0],Ld[1],Ld[2]);gl.uniform3f(U.L,Ld[0]/ll,Ld[1]/ll,Ld[2]/ll);gl.uniform3fv(U.LC,S.L.col);gl.uniform1f(U.amb,S.L.amb);gl.uniform3f(U.E,0,0,dist);gl.uniform1i(U.s,0);
+    var gp=null;parts.forEach(function(p){if(p.mode==='g'){gp=p;return;}dp(p);});
+    if(gp){gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);gl.depthMask(false);dp(gp);gl.depthMask(true);gl.disable(gl.BLEND);}}
+  function dp(p){gl.bindBuffer(gl.ARRAY_BUFFER,p.b);gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,3,gl.FLOAT,false,32,0);gl.enableVertexAttribArray(ln);gl.vertexAttribPointer(ln,3,gl.FLOAT,false,32,12);gl.enableVertexAttribArray(lt);gl.vertexAttribPointer(lt,2,gl.FLOAT,false,32,24);
+    gl.uniform1f(U.mt,p.mode==='t'?1:0);gl.uniform1f(U.gls,p.mode==='g'?(o.glass==='mate'?.18:1):0);gl.uniform1f(U.shin,p.mode==='g'?(o.glass==='mate'?6:90):18);var c=p.col||[1,1,1];gl.uniform4f(U.c,c[0],c[1],c[2],1);gl.drawArrays(gl.TRIANGLES,0,6);}
+  function fit(){var r=cv.getBoundingClientRect(),d=Math.min(2,window.devicePixelRatio||1);cv.width=Math.max(2,r.width*d);cv.height=Math.max(2,r.height*d);draw();}
+  var pts={},g0=null,mode='rot',tap=0;
+  function clampPan(){var mx=W/2+fw,my=H/2+fw;S.px=Math.max(-mx,Math.min(mx,S.px));S.py=Math.max(-my,Math.min(my,S.py));}
+  function zoomAt(z,cx,cy){var k0=S.k||1;var r=cv.getBoundingClientRect();var fx=cx-r.width/2,fy=-(cy-r.height/2);var wx=fx/k0-S.px,wy=fy/k0-S.py;S.z=Math.max(.5,Math.min(8,z));draw();var k1=S.k||1;S.px=fx/k1-wx;S.py=fy/k1-wy;clampPan();draw();}
+  function two(){var k=Object.keys(pts);var a=pts[k[0]],b=pts[k[1]];return{d:Math.hypot(a.x-b.x,a.y-b.y),x:(a.x+b.x)/2,y:(a.y+b.y)/2};}
+  function loc(e){var r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top};}
+  cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);pts[e.pointerId]=loc(e);var n=Object.keys(pts).length;
+    if(n===1){var t=Date.now();if(t-tap<300){api.reset();tap=0;}else tap=t;}
+    if(n===2){var m=two();g0={d:m.d,x:m.x,y:m.y,z:S.z};}});
+  cv.addEventListener('pointermove',function(e){var p=pts[e.pointerId];if(!p)return;var q=loc(e),dx=q.x-p.x,dy=q.y-p.y;pts[e.pointerId]=q;var n=Object.keys(pts).length;
+    if(n===1){if(mode==='pan'){S.px+=dx/(S.k||1);S.py-=dy/(S.k||1);clampPan();}else{S.ry=Math.max(-1.45,Math.min(1.45,S.ry+dx*.006));S.rx=Math.max(-1.4,Math.min(1.4,S.rx+dy*.006));}draw();}
+    else if(n===2&&g0){var m=two();S.px+=(m.x-g0.x)/(S.k||1);S.py-=(m.y-g0.y)/(S.k||1);g0.x=m.x;g0.y=m.y;clampPan();zoomAt(g0.z*m.d/g0.d,m.x,m.y);}});
+  var up=function(e){delete pts[e.pointerId];if(Object.keys(pts).length<2)g0=null;};cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+  cv.addEventListener('wheel',function(e){e.preventDefault();var q=loc(e);zoomAt(S.z*Math.exp(-e.deltaY*.0015),q.x,q.y);},{passive:false});
+  cv.style.touchAction='none';
+  var api={draw:draw,fit:fit,reset:function(){S.rx=-.18;S.ry=.42;S.z=1;S.px=0;S.py=0;draw();},front:function(){S.rx=0;S.ry=0;S.z=1;S.px=0;S.py=0;draw();},setLight:function(L){S.L=L;draw();},
+    setPose:function(rx,ry,z){if(rx!=null)S.rx=rx;if(ry!=null)S.ry=ry;if(z!=null)S.z=z;draw();},setMode:function(m){mode=m;},getMode:function(){return mode;},zoom:function(f){var r=cv.getBoundingClientRect();zoomAt(S.z*f,r.width/2,r.height/2);},S:S};
+  return api;
+}
+function $(i){return document.getElementById(i);}function t(e,x){e.textContent=x;}
+function show(D){$('app').className='';$('land').className='hid';t($('biz'),D.biz);t($('ttl'),'Propuesta de enmarcado'+(D.client?' · '+D.client:''));document.title=D.biz+' · Propuesta de enmarcado';
+  D.spec.forEach(function(s){var d=document.createElement('div');d.textContent=s[0];var b=document.createElement('b');b.textContent=s[1];d.appendChild(b);$('sp').appendChild(d);});
+  t($('iva'),'IVA '+D.ivaPct+'% incluido');t($('price'),D.price);t($('foot'),'Fecha '+D.date+' · Presupuesto válido por 15 días · Vista ilustrativa.');
+  var im=new Image();im.onload=function(){var o=D.opts;o.img=im;o.bg=[.09,.085,.075];var v=Viewer3D($('c'),o);if(!v)return;v.fit();window.onresize=v.fit;$('f').onclick=v.front;$('r').onclick=v.reset;
+    var mb=$('m');mb.onclick=function(){var p=v.getMode()==='rot';v.setMode(p?'pan':'rot');mb.textContent=p?'⟲ Girar':'✋ Mover';};$('zi').onclick=function(){v.zoom(1.4);};$('zo').onclick=function(){v.zoom(1/1.4);};};im.src=D.tex;}
+(function(){
+  var id="qmf6gbnac";
+  var urls=['../'+id+'.json','../../p/'+id+'.json'];
+  var n=0;
+  function fail(){t($('lmsg'),'No se pudo cargar la propuesta. Revisá tu conexión.');}
+  function go(){fetch(urls[n%urls.length]+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw r.status;return r.json();}).then(show).catch(function(){n++;if(n<10){t($('lmsg'),'Cargando…');setTimeout(go,n<3?400:2000);}else fail();});}
+  go();
+})();
+</script>
+</body></html>
