@@ -2,9 +2,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Propuesta de enmarcado – Luis XIII Acanto · 8 cm</title>
-<meta name="description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta name="description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Abrí el link para girar el cuadro en 3D.">
 <meta property="og:title" content="Propuesta de enmarcado – Luis XIII Acanto · 8 cm">
-<meta property="og:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta property="og:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Abrí el link para girar el cuadro en 3D.">
 <meta property="og:image" content="https://harold89556.github.io/enmarcado-visor/p/scz7bdf9m.jpg">
 <meta property="og:image:secure_url" content="https://harold89556.github.io/enmarcado-visor/p/scz7bdf9m.jpg">
 <meta property="og:image:width" content="1200">
@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="Galería">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Propuesta de enmarcado – Luis XIII Acanto · 8 cm">
-<meta name="twitter:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Precio final ₲ 412.448 (IVA 10% incluido). Abrí el link para girar el cuadro en 3D.">
+<meta name="twitter:description" content="Galería. Obra 60 × 90 cm. Moldura Luis XIII Acanto · 8 cm. Abrí el link para girar el cuadro en 3D.">
 <meta name="twitter:image" content="https://harold89556.github.io/enmarcado-visor/p/scz7bdf9m.jpg">
 <link rel="image_src" href="https://harold89556.github.io/enmarcado-visor/p/scz7bdf9m.jpg">
 <style>body{margin:0;font-family:system-ui,Arial,sans-serif;background:#f4f1ea;color:#1d1d1f}header{padding:16px 18px 6px}h1{margin:0;font-size:13px;letter-spacing:.12em;color:#9a7322;text-transform:uppercase}h2{margin:4px 0 0;font-size:22px}
@@ -31,7 +31,7 @@
 <div id="app" class="hid"><header><h1 id="biz"></h1><h2 id="ttl">Propuesta de enmarcado</h2></header>
 <canvas id="c"></canvas><div class="bar"><button id="f">Frente</button><button id="m">✋ Mover</button><button id="zi">＋</button><button id="zo">－</button><button id="r">↺</button></div>
 <p style="text-align:center;font-size:12px;color:#777;margin:0">1 dedo: girar · 2 dedos: mover y zoom · doble toque: reiniciar</p>
-<div class="sp" id="sp"></div><div class="pr"><div><div style="font-weight:700">PRECIO FINAL</div><div style="font-size:12px;color:#5b5b60" id="iva"></div></div><b id="price"></b></div>
+<div class="sp" id="sp"></div>
 <footer id="foot"></footer></div>
 <script>
 function Viewer3D(cv,o){
@@ -100,7 +100,7 @@ function Viewer3D(cv,o){
 function $(i){return document.getElementById(i);}function t(e,x){e.textContent=x;}
 function show(D){$('app').className='';$('land').className='hid';t($('biz'),D.biz);t($('ttl'),'Propuesta de enmarcado'+(D.client?' · '+D.client:''));document.title=D.biz+' · Propuesta de enmarcado';
   D.spec.forEach(function(s){var d=document.createElement('div');d.textContent=s[0];var b=document.createElement('b');b.textContent=s[1];d.appendChild(b);$('sp').appendChild(d);});
-  t($('iva'),'IVA '+D.ivaPct+'% incluido');t($('price'),D.price);t($('foot'),'Fecha '+D.date+' · Presupuesto válido por 15 días · Vista ilustrativa.');
+  t($('foot'),'Fecha '+D.date+' · Vista ilustrativa.');
   var im=new Image();im.onload=function(){var o=D.opts;o.img=im;o.bg=[.09,.085,.075];var v=Viewer3D($('c'),o);if(!v)return;v.fit();window.onresize=v.fit;$('f').onclick=v.front;$('r').onclick=v.reset;
     var mb=$('m');mb.onclick=function(){var p=v.getMode()==='rot';v.setMode(p?'pan':'rot');mb.textContent=p?'⟲ Girar':'✋ Mover';};$('zi').onclick=function(){v.zoom(1.4);};$('zo').onclick=function(){v.zoom(1/1.4);};};im.src=D.tex;}
 (function(){
