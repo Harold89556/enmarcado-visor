@@ -52,7 +52,16 @@ function Viewer3D(cv,o){
   var tex0=null;
   if(multi){
     // NO container mesh: each panel is its own stretcher box. Pivot = group center (coords already centered).
+    // v1.27: textura por panel robusta (en el link el JSON no trae canvas: se recorta de la textura del grupo)
+    var _src=o.img,_sw=_src&&(_src.naturalWidth||_src.width),_sh=_src&&(_src.naturalHeight||_src.height);
+    function _drawable(x){return x&&(typeof HTMLCanvasElement!=='undefined'&&x instanceof HTMLCanvasElement||typeof HTMLImageElement!=='undefined'&&x instanceof HTMLImageElement&&x.complete&&x.naturalWidth>0||typeof ImageBitmap!=='undefined'&&x instanceof ImageBitmap);}
+    function _crop(pan){var c=document.createElement('canvas');var k=Math.min(1,_sw?_sw/W:1);c.width=Math.max(4,Math.round(pan.W/W*_sw));c.height=Math.max(4,Math.round(pan.H/H*_sh));
+      var sx=(pan.cx-pan.W/2+W/2)/W*_sw,sy=(H/2-(pan.cy+pan.H/2))/H*_sh;try{c.getContext('2d').drawImage(_src,sx,sy,pan.W/W*_sw,pan.H/H*_sh,0,0,c.width,c.height);}catch(e){}return c;}
+    function _edge(c,side){try{var x=c.getContext('2d'),w=c.width,h=c.height,d=side==='l'?x.getImageData(0,0,2,h):side==='r'?x.getImageData(w-2,0,2,h):side==='t'?x.getImageData(0,0,w,2):x.getImageData(0,h-2,w,2);d=d.data;var r=0,g=0,b=0,n=0;for(var i=0;i<d.length;i+=4){r+=d[i];g+=d[i+1];b+=d[i+2];n++;}return n?[r/n/255,g/n/255,b/n/255]:null;}catch(e){return null;}}
+    function _dark(e){return !e||!e.length||(e[0]+e[1]+e[2])<0.03;}
     o.panels.forEach(function(pan){
+      if(!_drawable(pan.img)&&_src)pan.img=_crop(pan);
+      if(pan.img&&pan.img.getContext){['L','R','T','B'].forEach(function(S){if(_dark(pan['edge'+S]))pan['edge'+S]=_edge(pan.img,S.toLowerCase())||pan['edge'+S];});if(_dark(pan.edge))pan.edge=pan.edgeL;}
       var pw=pan.W,ph=pan.H,pd=Math.max(2,pan.D||3.5);
       var cx=pan.cx,cy=pan.cy;
       var x0=cx-pw/2,x1=cx+pw/2,y0=cy-ph/2,y1=cy+ph/2,zf=pd,zi=0;
